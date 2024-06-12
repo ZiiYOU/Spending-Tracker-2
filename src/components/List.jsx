@@ -39,14 +39,27 @@ const List = ({ filteredList }) => {
                 <IconBox>{li.item.split(" ")[0]}</IconBox>
                 <div
                   style={{
+                    width: "85%",
                     display: "flex",
-                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "space-between",
                   }}
                 >
-                  <DateBox>{li.date}</DateBox>
-                  <DescriptionBox>{li.description}</DescriptionBox>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      flexShrink: 0.8,
+                    }}
+                  >
+                    <DateBox>{li.date}</DateBox>
+                    <DescriptionBox>{li.description}</DescriptionBox>
+                  </div>
+
+                  <div
+                    style={{ whiteSpace: "nowrap", flexShrink: 1 }}
+                  >{`${Number(li.price).toLocaleString()} 원`}</div>
                 </div>
-                <div>{`${Number(li.price).toLocaleString()} 원`}</div>
               </ListBox>
             );
           })}
@@ -61,7 +74,8 @@ export { ListBox, IconBox, DateBox, DescriptionBox };
 
 const ListContainer = styled.div`
   position: relative;
-  width: 750px;
+  width: 90%;
+  max-width: 750px;
   height: 500px;
   background-color: #fff;
   border-radius: 50px;
@@ -69,7 +83,7 @@ const ListContainer = styled.div`
   display: flex;
   align-items: center;
   padding: 40px 0;
-  margin-bottom: 100px;
+  margin-bottom: 50px;
 `;
 
 const ListInner = styled.div`
@@ -79,12 +93,15 @@ const ListInner = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  overflow-x: hidden;
   overflow-y: auto;
   padding: 10px;
 `;
 
 const ListBox = styled.div`
-  width: 650px;
+  width: 90%;
+  max-width: 650px;
+  min-width: 300px;
   height: 80px;
   min-height: 80px;
   max-height: 100px;
@@ -102,6 +119,7 @@ const ListBox = styled.div`
   font-size: 18px;
   font-weight: 600;
   cursor: ${(props) => props.cursor};
+  overflow-x: hidden;
   &:hover {
     font-size: ${(props) => props.fontSize};
     transition: 0.5s;
@@ -117,13 +135,18 @@ const DateBox = styled.div`
   font-size: 14px;
   color: #aaa;
   margin-bottom: 8px;
+  flex-shrink: 1;
 `;
 
 const DescriptionBox = styled.div`
   margin-bottom: 20px;
-  width: 410px;
+  width: 100%;
+  max-height: 410px;
   padding: 2px 0;
   overflow-x: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  box-sizing: border-box;
+  margin-right: 10px;
+  flex-shrink: 0.8;
 `;

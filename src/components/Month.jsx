@@ -59,12 +59,14 @@ const Month = () => {
 export default Month;
 
 const MonthContainer = styled.div`
-  width: 750px;
-  height: 250px;
+  width: 90%;
+  max-width: 750px;
+  height: 80%;
+  min-height: 250px;
   background-color: #fff;
   border-radius: 50px;
   box-sizing: border-box;
-  margin-top: 30px;
+  margin-top: 40px;
   padding: 40px 40px;
   display: flex;
   flex-direction: row;
@@ -75,8 +77,11 @@ const MonthContainer = styled.div`
 `;
 
 const MonthBox = styled.div`
-  width: 95px;
-  height: 60px;
+  width: 20%;
+  max-width: 95px;
+  height: 10vh;
+  min-height: 40px;
+  max-height: 60px;
   background-color: ${(props) => props.backgroundColor};
   display: flex;
   justify-content: center;

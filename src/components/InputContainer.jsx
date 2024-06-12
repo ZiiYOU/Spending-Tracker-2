@@ -105,63 +105,75 @@ const InputContainer = ({ listId }) => {
   };
 
   const GoBackButton = () => {
-    navigate("/");
+    navigate(-1);
   };
 
   return (
-    <RegisterContainer>
-      <Inputs
-        type="date"
-        onChange={(event) => {
-          setDate(event.target.value);
-        }}
-        value={date}
-      ></Inputs>
-      <ItemSelect
-        onChange={(event) => {
-          setItem(event.target.value);
-        }}
-        value={item}
-      >
-        <option>🎂 식비</option>
-        <option>✈️ 여행 경비</option>
-        <option>🛍️ 쇼핑</option>
-        <option>🎁 친구 선물</option>
-        <option>✨ 기타</option>
-      </ItemSelect>
-      <Inputs
-        type="text"
-        placeholder="내용"
-        onChange={(event) => {
-          setDescription(event.target.value);
-        }}
-        value={description}
-      ></Inputs>
-      <Inputs
-        type="number"
-        placeholder="지출 금액"
-        onChange={(event) => {
-          setPrice(event.target.value);
-        }}
-        value={price}
-      ></Inputs>
-      <ButtonContainer>
-        <InputButton onClick={listId ? ModifyButton : AddList}>
-          {listId ? "수정" : "등록"}
-        </InputButton>
-        <InputButton onClick={DeleteButton}>삭제</InputButton>
-        <InputButton onClick={GoBackButton}>뒤로가기</InputButton>
-      </ButtonContainer>
-    </RegisterContainer>
+    <>
+      <RegisterContainer onSubmit={listId ? ModifyButton : AddList}>
+        <Inputs
+          type="date"
+          onChange={(event) => {
+            setDate(event.target.value);
+          }}
+          value={date}
+        ></Inputs>
+        <ItemSelect
+          onChange={(event) => {
+            setItem(event.target.value);
+          }}
+          value={item}
+        >
+          <option>🎂 식비</option>
+          <option>✈️ 여행 경비</option>
+          <option>🛍️ 쇼핑</option>
+          <option>🎁 친구 선물</option>
+          <option>✨ 기타</option>
+        </ItemSelect>
+        <Inputs
+          type="text"
+          placeholder="내용"
+          onChange={(event) => {
+            setDescription(event.target.value);
+          }}
+          value={description}
+        ></Inputs>
+        <Inputs
+          type="number"
+          placeholder="지출 금액"
+          onChange={(event) => {
+            setPrice(event.target.value);
+          }}
+          value={price}
+        ></Inputs>
+        <ButtonContainer>
+          <InputButton type="submit" onClick={listId ? ModifyButton : AddList}>
+            {listId ? "수정" : "등록"}
+          </InputButton>
+          <InputButton
+            type="button"
+            onClick={DeleteButton}
+            style={{ display: listId ? "" : "none" }}
+          >
+            삭제
+          </InputButton>
+          <InputButton type="button" onClick={GoBackButton}>
+            뒤로가기
+          </InputButton>
+        </ButtonContainer>
+      </RegisterContainer>
+    </>
   );
 };
 
 export default InputContainer;
 export { RegisterContainer, Inputs, ButtonContainer, InputButton };
 
-const RegisterContainer = styled.div`
-  width: 500px;
-  height: 430px;
+const RegisterContainer = styled.form`
+  width: 90%;
+  max-width: 500px;
+  min-width: 350px;
+  height: 400px;
   border-radius: 50px;
   background-color: #fff;
   display: flex;
@@ -170,11 +182,12 @@ const RegisterContainer = styled.div`
   justify-content: center;
   box-sizing: border-box;
   position: relative;
-  padding-top: 30px;
+  padding-top: 20px;
 `;
 
 const Inputs = styled.input`
-  width: 300px;
+  width: 90%;
+  max-width: 300px;
   height: 40px;
   border-radius: 10px;
   border: 2px solid #6592d1;
@@ -184,7 +197,8 @@ const Inputs = styled.input`
 `;
 
 const ItemSelect = styled.select`
-  width: 300px;
+  width: 90%;
+  max-width: 300px;
   height: 40px;
   border-radius: 10px;
   border: 2px solid #6592d1;
@@ -194,11 +208,11 @@ const ItemSelect = styled.select`
 `;
 
 const ButtonContainer = styled.div`
-  width: 100%;
+  width: 90%;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: 20px;
+  gap: 5%;
 `;
 
 const InputButton = styled.button`

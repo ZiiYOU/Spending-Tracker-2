@@ -6,12 +6,12 @@ import InputContainer from "../components/InputContainer";
 
 const SpendingBox = styled.div`
   width: 100%;
-  height: 650px;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 45px;
   justify-content: center;
   align-items: center;
+  gap: 50px;
 `;
 
 const Detailed = () => {

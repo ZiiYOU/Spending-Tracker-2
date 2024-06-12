@@ -11,11 +11,20 @@ const SelectedSpending = ({ listId }) => {
     <>
       <ListBox backgroundColor="#fff" cursor="default" fontSize="18px">
         <IconBox>{detailedList.item.split(" ")[0]}</IconBox>
-        <div>
-          <DateBox>{detailedList.date}</DateBox>
-          <DescriptionBox>{detailedList.description}</DescriptionBox>
+        <div
+          style={{
+            width: "85%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>
+            <DateBox>{detailedList.date}</DateBox>
+            <DescriptionBox>{detailedList.description}</DescriptionBox>
+          </div>
+          {`${Number(detailedList.price).toLocaleString()} 원`}
         </div>
-        {`${Number(detailedList.price).toLocaleString()} 원`}
       </ListBox>
     </>
   );

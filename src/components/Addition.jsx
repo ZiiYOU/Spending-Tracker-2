@@ -13,7 +13,9 @@ const Addition = () => {
 export default Addition;
 
 const AdditionButton = styled.button`
+  position: -webkit-sticky;
   position: sticky;
+  z-index: 9;
   width: 65px;
   height: 65px;
   border-radius: 50%;
