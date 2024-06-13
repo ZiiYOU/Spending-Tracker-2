@@ -1,0 +1,103 @@
+{
+  "spending": [
+    {
+      "id": "d1851f86-f2b7-be1f-8d2f-32772b3a20f2",
+      "date": "2024-06-13",
+      "item": "🎂 식비",
+      "description": "파스타",
+      "price": "23000",
+      "createdBy": "방지영",
+      "userId": "ziyoung"
+    },
+    {
+      "id": "51f5f3e6-3ac4-31c7-3c9d-b3a1f3b52802",
+      "date": "2024-05-05",
+      "item": "🎁 친구 선물",
+      "description": "어른이날 선물",
+      "price": "50000",
+      "createdBy": "방지영",
+      "userId": "ziyoung"
+    },
+    {
+      "id": "8eefcc9a-ae44-43e2-55b9-cbd11559d846",
+      "date": "2024-04-03",
+      "item": "🎂 식비",
+      "description": "밀카 쿠키",
+      "price": "6800",
+      "createdBy": "방지영",
+      "userId": "ziyoung"
+    },
+    {
+      "id": "f173ea86-64da-170f-cb66-69aa45a0a63a",
+      "date": "2024-12-25",
+      "item": "🎂 식비",
+      "description": "크리스마스 케이크",
+      "price": "49000",
+      "createdBy": "방지영",
+      "userId": "ziyoung"
+    },
+    {
+      "id": "0da50269-df01-b2a9-cc93-59fe20db48e7",
+      "date": "2024-11-11",
+      "item": "🎂 식비",
+      "description": "빼빼로데이",
+      "price": "11",
+      "createdBy": "방지영",
+      "userId": "ziyoung"
+    },
+    {
+      "id": "0cdb5fad-1844-f8dd-82d3-f78be1834254",
+      "date": "2024-07-18",
+      "item": "🎂 식비",
+      "description": "내가만든쿠키",
+      "price": "8000",
+      "createdBy": "방지영",
+      "userId": "ziyoung"
+    },
+    {
+      "id": "3e5829fe-651c-37f3-fca6-b5e2a4412363",
+      "date": "2024-10-10",
+      "item": "✈️ 여행 경비",
+      "description": "속초여행",
+      "price": "1010",
+      "createdBy": "방지영",
+      "userId": "ziyoung"
+    },
+    {
+      "id": "35d52b6a-40a2-edf4-2cc3-cc04fbf6518c",
+      "date": "2024-05-08",
+      "item": "✈️ 여행 경비",
+      "description": "100 일 기념 여행",
+      "price": "100000",
+      "createdBy": "바보",
+      "userId": "babo"
+    },
+    {
+      "id": "cc3e6e7d-249e-4db8-9995-4c31a969e5d3",
+      "date": "2024-06-23",
+      "item": "🎂 식비",
+      "description": "친구 생일 케이크",
+      "price": "50000",
+      "createdBy": "바보",
+      "userId": "babo"
+    },
+    {
+      "id": "2390a01c-20b6-f3dc-262f-0f3c174dc99e",
+      "date": "2024-12-09",
+      "item": "🎁 친구 선물",
+      "description": "승연이 시계",
+      "price": "240000",
+      "createdBy": "바보",
+      "userId": "babo"
+    },
+    {
+      "id": "401a4ec9-4994-8ad4-6d1d-1c939e4dd5db",
+      "date": "2024-12-30",
+      "item": "🎂 식비",
+      "description": "송년회",
+      "price": "100000",
+      "createdBy": "바보",
+      "userId": "babo"
+    }
+  ]
+}

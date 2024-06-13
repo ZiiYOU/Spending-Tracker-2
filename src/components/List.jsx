@@ -3,25 +3,35 @@ import styled from "styled-components";
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { SpendingContext } from "../context/spendingListContext";
+import { AuthContext } from "../context/authContext";
+import axios from "axios";
 
 const List = ({ filteredList }) => {
   const { list, setList } = useContext(SpendingContext);
+  const { userInfo, setUserInfo } = useContext(AuthContext);
+  console.log(userInfo);
   const navigate = useNavigate();
 
-  const GotoDetailedPage = (id) => {
-    navigate(`detailed/${id}`);
-  };
-
-  const GetSpendingList = () => {
-    const getSpendingList = JSON.parse(localStorage.getItem("spending list"));
-    if (getSpendingList) {
-      setList(getSpendingList);
+  const GetSpendingList = async () => {
+    try {
+      const { data } = await axios.get("http://localhost:4000/spending");
+      if (data.length) {
+        setList(data);
+      }
+    } catch (error) {
+      console.log("error", error);
     }
   };
 
   useEffect(() => {
     GetSpendingList();
   }, []);
+
+  const GotoDetailedPage = (id, userId) => {
+    if (userId === userInfo.userId) {
+      navigate(`detailed/${id}`);
+    }
+  };
 
   return (
     <>
@@ -31,7 +41,7 @@ const List = ({ filteredList }) => {
             return (
               <ListBox
                 key={li.id}
-                onClick={() => GotoDetailedPage(li.id)}
+                onClick={() => GotoDetailedPage(li.id, li.userId)}
                 backgroundColor="#f5f7f8"
                 cursor="pointer"
                 fontSize="20px"
@@ -39,26 +49,28 @@ const List = ({ filteredList }) => {
                 <IconBox>{li.item.split(" ")[0]}</IconBox>
                 <div
                   style={{
-                    width: "85%",
+                    width: "90%",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
                   }}
                 >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      flexShrink: 0.8,
-                    }}
-                  >
-                    <DateBox>{li.date}</DateBox>
+                  <div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: "5px",
+                        position: "absolute",
+                        top: "10px",
+                      }}
+                    >
+                      <DateBox>{li.date}</DateBox>
+                      <NicknameBox>✍🏻 {li.createdBy}</NicknameBox>
+                    </div>
                     <DescriptionBox>{li.description}</DescriptionBox>
                   </div>
-
-                  <div
-                    style={{ whiteSpace: "nowrap", flexShrink: 1 }}
-                  >{`${Number(li.price).toLocaleString()} 원`}</div>
+                  {`${Number(li.price).toLocaleString()} 원`}
                 </div>
               </ListBox>
             );
@@ -70,7 +82,7 @@ const List = ({ filteredList }) => {
 };
 
 export default List;
-export { ListBox, IconBox, DateBox, DescriptionBox };
+export { ListBox, IconBox, DateBox, DescriptionBox, NicknameBox };
 
 const ListContainer = styled.div`
   position: relative;
@@ -105,12 +117,13 @@ const ListBox = styled.div`
   height: 80px;
   min-height: 80px;
   max-height: 100px;
+  position: relative;
   background-color: ${(props) => props.backgroundColor};
   border-radius: 15px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 30px;
+  gap: 20px;
   box-sizing: border-box;
   padding: 0 20px;
   box-shadow: 5px 5px 10px gray;
@@ -127,6 +140,9 @@ const ListBox = styled.div`
 `;
 
 const IconBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 20px;
   margin-left: 10px;
 `;
@@ -134,19 +150,28 @@ const IconBox = styled.div`
 const DateBox = styled.div`
   font-size: 14px;
   color: #aaa;
-  margin-bottom: 8px;
-  flex-shrink: 1;
+  padding-right: 5px;
+  display: flex;
+  align-items: center;
+`;
+
+const NicknameBox = styled.div`
+  font-size: 14px;
+  color: #aaa;
+  padding-left: 10px;
+  border-left: 1.5px solid #aaa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const DescriptionBox = styled.div`
-  margin-bottom: 20px;
   width: 100%;
   max-height: 410px;
-  padding: 2px 0;
+  overflow-y: hidden;
   overflow-x: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   box-sizing: border-box;
   margin-right: 10px;
-  flex-shrink: 0.8;
 `;

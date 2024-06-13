@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { logOut } from "../api/auth";
+import { AuthContext } from "../context/authContext";
 
 const Layout = ({ children }) => {
   return (
@@ -16,6 +18,8 @@ export default Layout;
 const Header = () => {
   const navigate = useNavigate();
   const [isHome, setIsHome] = useState(false);
+  const { userInfo, setUserInfo, isAuthenticated, setIsAuthenticated } =
+    useContext(AuthContext);
 
   const onClickLogo = () => {
     navigate("/");
@@ -25,9 +29,16 @@ const Header = () => {
     navigate("signIn");
   };
 
-  const OnClickJoin = () => {
-    navigate("join");
+  const onLogoutHandler = () => {
+    logOut();
+    setIsAuthenticated(false);
+    navigate("signIn");
   };
+
+  useEffect(() => {
+    const userLocalStorage = JSON.parse(localStorage.getItem("user"));
+    setUserInfo(userLocalStorage);
+  }, []);
 
   useEffect(() => {
     if (window.location.pathname === "/") {
@@ -36,6 +47,8 @@ const Header = () => {
     }
     setIsHome(false);
   }, [window.location.pathname]);
+
+  console.log(userInfo);
 
   return (
     <div>
@@ -46,9 +59,30 @@ const Header = () => {
           </Logo>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <SignInBtn onClick={OnClickSignIn}>로그인</SignInBtn>
-          <SignInBtn onClick={OnClickJoin}>회원가입</SignInBtn>
+        <div
+          style={{
+            display: isAuthenticated ? "flex" : "none",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <AvatarBox>
+            <img
+              src={
+                userInfo?.avatar
+                  ? userInfo?.avatar
+                  : "/public/icons8-male-user-50.png"
+              }
+              style={{
+                width: "24px",
+                position: "absolute",
+                objectFit: "cover",
+              }}
+            />
+          </AvatarBox>
+          <HeaderBtn>{`${userInfo?.nickname} 님`} </HeaderBtn>
+          <HeaderBtn onClick={OnClickSignIn}>내 프로필</HeaderBtn>
+          <HeaderBtn onClick={onLogoutHandler}>로그아웃</HeaderBtn>
         </div>
       </HeaderContainer>
     </div>
@@ -99,7 +133,15 @@ const Logo = styled.button`
   border: none;
 `;
 
-const SignInBtn = styled.button`
+const AvatarBox = styled.div`
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #fff;
+  position: relative;
+`;
+
+const HeaderBtn = styled.button`
   width: 70px;
   height: 18px;
   background-color: transparent;

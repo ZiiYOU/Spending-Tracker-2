@@ -4,6 +4,8 @@ import uuid from "react-uuid";
 import { useNavigate } from "react-router-dom";
 import { SpendingContext } from "../context/spendingListContext";
 import { MonthContext } from "../context/selectedMonthContext";
+import { AuthContext } from "../context/authContext";
+import axios from "axios";
 
 const InputContainer = ({ listId }) => {
   const { list, setList } = useContext(SpendingContext);
@@ -12,6 +14,7 @@ const InputContainer = ({ listId }) => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
   const { selectedMonth, setSelectedMonth } = useContext(MonthContext);
+  const { userInfo, setUserInfo } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,7 +28,9 @@ const InputContainer = ({ listId }) => {
     }
   }, []);
 
-  const AddList = () => {
+  const onAddHandler = async (event) => {
+    event.preventDefault();
+
     if (!date) {
       alert("지출한 날짜를 입력해주세요!");
       return;
@@ -39,38 +44,37 @@ const InputContainer = ({ listId }) => {
       return;
     }
 
-    setList((prev) => [
-      ...prev,
-      {
-        id: uuid(),
-        date: date,
-        item: item,
-        description: description,
-        price: price,
-      },
-    ]);
+    const spendingObj = {
+      id: uuid(),
+      date: date,
+      item: item,
+      description: description,
+      price: price,
+      createdBy: userInfo.nickname,
+      userId: userInfo.userId,
+    };
 
-    const spendingList = [
-      ...list,
-      {
-        id: uuid(),
-        date: date,
-        item: item,
-        description: description,
-        price: price,
-      },
-    ];
-    setLocalStorage(spendingList);
+    setList((prev) => [...prev, spendingObj]);
+
+    try {
+      const { data } = await axios.post(
+        "http://localhost:4000/spending",
+        spendingObj
+      );
+      alert("성공..");
+      console.log(data);
+    } catch (error) {
+      console.log("error =>", error);
+    }
+
     setSelectedMonth(Number(date.split("-")[1]));
-    localStorage.setItem("selected month", Number(dateVal.split("-")[1]));
+    localStorage.setItem("selected month", Number(date.split("-")[1]));
     navigate("/");
   };
 
-  const setLocalStorage = (spending) => {
-    localStorage.setItem("spending list", JSON.stringify(spending));
-  };
+  const onModifyHandler = async (event) => {
+    event.preventDefault();
 
-  const ModifyButton = () => {
     const ModifiedList = list.map((li) => {
       if (li.id.toString() === listId.listId.toString()) {
         li = {
@@ -79,38 +83,59 @@ const InputContainer = ({ listId }) => {
           item: item,
           description: description,
           price: price,
+          createdBy: li.nickname,
+          userId: li.userId,
         };
       }
       return li;
     });
 
+    const ModifiedObj = ModifiedList.filter(
+      (obj) => obj.id.toString() === listId.listId.toString()
+    );
+
+    try {
+      await axios.patch(
+        `http://localhost:4000/spending/${listId.listId}`,
+        ...ModifiedObj
+      );
+      alert("성공!");
+    } catch (error) {
+      console.log("error =>", error);
+    }
+
     setSelectedMonth(Number(date.split("-")[1]));
     localStorage.setItem("selected month", Number(date.split("-")[1]));
     setList(ModifiedList);
-    localStorage.setItem("spending list", JSON.stringify(ModifiedList));
 
     navigate("/");
   };
 
-  const DeleteButton = () => {
+  const onDeleteHandler = async () => {
     if (confirm("이 항목을 삭제하시겠습니까 ?")) {
       const DeletedList = list.filter(
         (li) => li.id.toString() !== listId.listId.toString()
       );
 
+      try {
+        await axios.delete(`http://localhost:4000/spending/${listId.listId}`);
+        alert("성공!");
+      } catch (error) {
+        console.log("error =>", error);
+      }
+
       setList(DeletedList);
-      localStorage.setItem("spending list", JSON.stringify(DeletedList));
       navigate("/");
     }
   };
 
-  const GoBackButton = () => {
+  const goBackHandler = () => {
     navigate(-1);
   };
 
   return (
     <>
-      <RegisterContainer onSubmit={listId ? ModifyButton : AddList}>
+      <RegisterContainer onSubmit={listId ? onModifyHandler : onAddHandler}>
         <Inputs
           type="date"
           onChange={(event) => {
@@ -147,17 +172,15 @@ const InputContainer = ({ listId }) => {
           value={price}
         ></Inputs>
         <ButtonContainer>
-          <InputButton type="submit" onClick={listId ? ModifyButton : AddList}>
-            {listId ? "수정" : "등록"}
-          </InputButton>
+          <InputButton type="submit">{listId ? "수정" : "등록"}</InputButton>
           <InputButton
             type="button"
-            onClick={DeleteButton}
+            onClick={onDeleteHandler}
             style={{ display: listId ? "" : "none" }}
           >
             삭제
           </InputButton>
-          <InputButton type="button" onClick={GoBackButton}>
+          <InputButton type="button" onClick={goBackHandler}>
             뒤로가기
           </InputButton>
         </ButtonContainer>

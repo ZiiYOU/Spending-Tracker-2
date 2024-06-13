@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Month from "../components/Month";
 import Summary from "../components/Summary";
@@ -7,6 +7,8 @@ import Addition from "../components/Addition";
 import { useContext } from "react";
 import { SpendingContext } from "../context/spendingListContext";
 import { MonthContext } from "../context/selectedMonthContext";
+import { AuthContext } from "../context/authContext";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   position: relative;
@@ -40,6 +42,15 @@ const LogoStyle = styled.div`
 const Home = () => {
   const { list, setList } = useContext(SpendingContext);
   const { selectedMonth, setSelectedMonth } = useContext(MonthContext);
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(isAuthenticated);
+    if (!isAuthenticated) {
+      navigate("signIn");
+    }
+  }, []);
 
   let filteredList = [];
   if (list.length !== 0) {

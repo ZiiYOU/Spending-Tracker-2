@@ -15,6 +15,8 @@ const signUp = async (info) => {
 const logIn = async (info) => {
   try {
     const { data } = await axios.post(`${Auth_Api}/login`, info);
+    localStorage.setItem("accessToken", data.accessToken);
+    console.log(data);
     return data;
   } catch (error) {
     console.log("error =>", error);
@@ -22,4 +24,8 @@ const logIn = async (info) => {
   }
 };
 
-export { signUp, logIn };
+const logOut = () => {
+  localStorage.removeItem("accessToken");
+};
+
+export { signUp, logIn, logOut };

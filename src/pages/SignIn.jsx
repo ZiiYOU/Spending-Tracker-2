@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Inputs, InputButton } from "../components/InputContainer";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { logIn } from "../api/auth";
+import { AuthContext } from "../context/authContext";
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const { userInfo, setUserInfo, isAuthenticated, setIsAuthenticated } =
+    useContext(AuthContext);
+
   const navigateHandler = () => {
     navigate("/join");
   };
@@ -30,13 +34,18 @@ const SignIn = () => {
       alert("비밀번호를 입력해주세요.");
       return;
     }
-    console.log(idPw);
-    const response = await logIn(idPw);
+    const { avatar, nickname, success, userId } = await logIn(idPw);
+    console.log(userId, avatar, nickname);
 
-    console.log(response.accessToken);
-    localStorage.setItem("accessToken", response.accessToken);
-
-    navigate("/");
+    if (success) {
+      setUserInfo({ userId, avatar, nickname });
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ userId, avatar, nickname })
+      );
+      setIsAuthenticated(true);
+      navigate("/");
+    }
   };
 
   return (
@@ -60,7 +69,9 @@ const SignIn = () => {
         <InputButton type="submit">로그인</InputButton>
 
         <PageBtnBox>
-          <PageBtn onClick={navigateHandler}>{`회원가입 >`} </PageBtn>
+          <PageBtn type="button" onClick={navigateHandler}>
+            {`회원가입 >`}
+          </PageBtn>
         </PageBtnBox>
       </SignInContainer>
     </Container>
