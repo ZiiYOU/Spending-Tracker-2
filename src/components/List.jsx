@@ -5,27 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { SpendingContext } from "../context/spendingListContext";
 import { AuthContext } from "../context/authContext";
 import axios from "axios";
+import useSpending from "../customHook/useSpending";
 
 const List = ({ filteredList }) => {
   const { list, setList } = useContext(SpendingContext);
   const { userInfo, setUserInfo } = useContext(AuthContext);
-  console.log(userInfo);
   const navigate = useNavigate();
 
-  const GetSpendingList = async () => {
-    try {
-      const { data } = await axios.get("http://localhost:4000/spending");
-      if (data.length) {
-        setList(data);
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  useEffect(() => {
-    GetSpendingList();
-  }, []);
+  useSpending();
 
   const GotoDetailedPage = (id, userId) => {
     if (userId === userInfo.userId) {

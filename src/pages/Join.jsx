@@ -64,7 +64,7 @@ const Join = () => {
   };
 
   return (
-    <JoinContainer>
+    <JoinInner>
       <JoinTitle>Join Us 🎉</JoinTitle>
       <RegisterContainer onSubmit={JoinHandler}>
         <Inputs
@@ -105,13 +105,13 @@ const Join = () => {
           >{`로그인 >`}</PageBtn>
         </PageBtnBox>
       </RegisterContainer>
-    </JoinContainer>
+    </JoinInner>
   );
 };
 
 export default Join;
 
-const JoinContainer = styled.div`
+const JoinInner = styled.div`
   width: 100%;
   height: 100vh;
   background-color: #f5f7f8;

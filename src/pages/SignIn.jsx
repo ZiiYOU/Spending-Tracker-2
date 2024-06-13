@@ -49,7 +49,7 @@ const SignIn = () => {
   };
 
   return (
-    <Container>
+    <SignInInner>
       <SignInTitle>Log In ✨ </SignInTitle>
       <SignInContainer onSubmit={onSubmitHandler}>
         <Inputs
@@ -74,14 +74,14 @@ const SignIn = () => {
           </PageBtn>
         </PageBtnBox>
       </SignInContainer>
-    </Container>
+    </SignInInner>
   );
 };
 
 export default SignIn;
 export { PageBtnBox, PageBtn };
 
-const Container = styled.div`
+const SignInInner = styled.div`
   width: 100%;
   height: 100vh;
   background-color: #f5f7f8;

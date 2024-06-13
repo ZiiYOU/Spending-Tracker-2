@@ -25,8 +25,8 @@ const Header = () => {
     navigate("/");
   };
 
-  const OnClickSignIn = () => {
-    navigate("signIn");
+  const OnClickMyPage = () => {
+    navigate("mypage");
   };
 
   const onLogoutHandler = () => {
@@ -48,8 +48,6 @@ const Header = () => {
     setIsHome(false);
   }, [window.location.pathname]);
 
-  console.log(userInfo);
-
   return (
     <div>
       <HeaderContainer>
@@ -64,6 +62,11 @@ const Header = () => {
             display: isAuthenticated ? "flex" : "none",
             flexDirection: "row",
             alignItems: "center",
+            width: "33%",
+            minWidth: "380px",
+            height: "80%",
+            gap: "2%",
+            justifyContent: "flex-end",
           }}
         >
           <AvatarBox>
@@ -71,17 +74,19 @@ const Header = () => {
               src={
                 userInfo?.avatar
                   ? userInfo?.avatar
-                  : "/public/icons8-male-user-50.png"
+                  : "/public/icons8-사람-100.png"
               }
               style={{
                 width: "24px",
                 position: "absolute",
                 objectFit: "cover",
+                aspectRatio: "1/1",
+                borderRadius: "50%",
               }}
             />
           </AvatarBox>
-          <HeaderBtn>{`${userInfo?.nickname} 님`} </HeaderBtn>
-          <HeaderBtn onClick={OnClickSignIn}>내 프로필</HeaderBtn>
+          <HeaderName>{`${userInfo?.nickname} 님`} </HeaderName>
+          <HeaderBtn onClick={OnClickMyPage}>내 프로필</HeaderBtn>
           <HeaderBtn onClick={onLogoutHandler}>로그아웃</HeaderBtn>
         </div>
       </HeaderContainer>
@@ -105,9 +110,9 @@ const LayoutStyle = styled.div`
 
 const HeaderContainer = styled.div`
   width: 100vw;
-  height: 8vh;
+  height: 7vh;
   box-sizing: border-box;
-  padding: 2% 7vw;
+  padding: 0 7vw;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -134,11 +139,30 @@ const Logo = styled.button`
 `;
 
 const AvatarBox = styled.div`
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background-color: #fff;
   position: relative;
+  margin: 0 1% 1%;
+  @media screen and (max-width: 716px) {
+    display: none;
+  }
+`;
+
+const HeaderName = styled.div`
+  width: 20%;
+  height: 18px;
+  background-color: transparent;
+  box-sizing: border-box;
+  border-color: transparent;
+  color: grey;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  @media screen and (max-width: 716px) {
+    display: none;
+  }
 `;
 
 const HeaderBtn = styled.button`
@@ -151,6 +175,7 @@ const HeaderBtn = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 13px;
   cursor: pointer;
   &:hover {
     color: black;

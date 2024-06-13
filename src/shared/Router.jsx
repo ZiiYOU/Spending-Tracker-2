@@ -9,6 +9,7 @@ import AuthProvider from "../context/authContext";
 import Create from "../pages/Create";
 import SignIn from "../pages/SignIn";
 import Join from "../pages/Join";
+import MyPage from "../pages/MyPage";
 
 const Router = () => {
   return (
@@ -23,6 +24,7 @@ const Router = () => {
                 <Route path="detailed/:listId" element={<Detailed />} />
                 <Route path="signIn" element={<SignIn />} />
                 <Route path="join" element={<Join />} />
+                <Route path="mypage" element={<MyPage />} />
               </Routes>
             </Layout>
           </BrowserRouter>

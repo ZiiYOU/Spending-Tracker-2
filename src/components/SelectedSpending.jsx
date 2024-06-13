@@ -1,16 +1,19 @@
 import React, { useContext, useEffect } from "react";
 import { SpendingContext } from "../context/spendingListContext";
 import { ListBox, IconBox, DateBox, DescriptionBox, NicknameBox } from "./List";
+import useSpending from "../customHook/useSpending";
 
 const SelectedSpending = ({ listId }) => {
   const { list, setList } = useContext(SpendingContext);
+
+  useSpending();
 
   console.log(list);
   let detailedList = list.find((li) => li.id === listId.listId);
 
   return (
     <>
-      {list && (
+      {list.length && (
         <>
           <ListBox backgroundColor="#fff" cursor="default" fontSize="18px">
             <IconBox>{detailedList.item.split(" ")[0]}</IconBox>
