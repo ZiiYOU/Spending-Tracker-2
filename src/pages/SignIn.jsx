@@ -35,14 +35,9 @@ const SignIn = () => {
       return;
     }
     const { avatar, nickname, success, userId } = await logIn(idPw);
-    console.log(userId, avatar, nickname);
 
     if (success) {
-      setUserInfo({ userId, avatar, nickname });
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ userId, avatar, nickname })
-      );
+      setUserInfo({ avatar, nickname, userId });
       setIsAuthenticated(true);
       navigate("/");
     }

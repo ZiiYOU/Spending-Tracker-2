@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { logOut } from "../api/auth";
 import { AuthContext } from "../context/authContext";
+import useAuth from "../customHook/useAuth";
 
 const Layout = ({ children }) => {
   return (
@@ -21,6 +22,8 @@ const Header = () => {
   const { userInfo, setUserInfo, isAuthenticated, setIsAuthenticated } =
     useContext(AuthContext);
 
+  useAuth();
+
   const onClickLogo = () => {
     navigate("/");
   };
@@ -34,11 +37,6 @@ const Header = () => {
     setIsAuthenticated(false);
     navigate("signIn");
   };
-
-  useEffect(() => {
-    const userLocalStorage = JSON.parse(localStorage.getItem("user"));
-    setUserInfo(userLocalStorage);
-  }, []);
 
   useEffect(() => {
     if (window.location.pathname === "/") {

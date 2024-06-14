@@ -3,25 +3,30 @@ import styled from "styled-components";
 import { AuthContext } from "../context/authContext";
 import { InputButton } from "../components/InputContainer";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../customHook/useAuth";
+import { updateUser } from "../api/auth";
 
 const MyPage = () => {
   const { userInfo, setUserInfo } = useContext(AuthContext);
+  const [imgFile, setImgFile] = useState(null);
   const [imgPath, setImgPath] = useState("");
   const [name, setName] = useState("");
   const navigate = useNavigate();
 
+  useAuth();
+
   useEffect(() => {
     setName(userInfo.nickname);
-    if (userInfo.avatar) {
-      setImgPath(userInfo.avatar);
+    if (userInfo?.avatar) {
+      setImgPath(userInfo?.avatar);
     }
   }, []);
 
   const uploadImg = (event) => {
-    const imgFile = event.target.files[0];
-    console.log(imgFile);
+    const File = event.target.files[0];
+    setImgFile(File);
     const reader = new FileReader();
-    reader.readAsDataURL(imgFile);
+    reader.readAsDataURL(File);
     console.log(reader.result);
     reader.onload = () => {
       setImgPath(reader.result.toString());
@@ -32,15 +37,18 @@ const MyPage = () => {
     setName(event.target.value);
   };
 
-  const onSubmitHandler = (event) => {
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
     const newUserInfo = {
-      avatar: imgPath,
-      userId: userInfo.userId,
+      avatar: imgFile,
       nickname: name,
     };
-    setUserInfo(newUserInfo);
-    localStorage.setItem("user", JSON.stringify(newUserInfo));
+    const { avatar, nickname } = await updateUser(newUserInfo);
+    setUserInfo({
+      avatar,
+      nickname,
+      id: userInfo.id,
+    });
     navigate("/");
   };
 
@@ -69,20 +77,23 @@ const MyPage = () => {
             style={{ display: "none" }}
           />
         </AvatarWrapper>
-        <UserInfoContainer>
-          <UserInfoBox>
-            <UserInfoTitle>아이디 : </UserInfoTitle>
-            <UserInfoContent>{userInfo?.userId}</UserInfoContent>
-          </UserInfoBox>
-          <UserInfoBox style={{ borderColor: "transparent" }}>
-            <UserInfoTitle>닉네임 :</UserInfoTitle>
-            <UserInfoInput
-              type="text"
-              onChange={onChangeHandler}
-              value={name}
-            />
-          </UserInfoBox>
-        </UserInfoContainer>
+        {userInfo && (
+          <UserInfoContainer>
+            <UserInfoBox>
+              <UserInfoTitle>아이디 : </UserInfoTitle>
+              <UserInfoContent>{userInfo.id}</UserInfoContent>
+            </UserInfoBox>
+            <UserInfoBox style={{ borderColor: "transparent" }}>
+              <UserInfoTitle>닉네임 :</UserInfoTitle>
+              <UserInfoInput
+                type="text"
+                onChange={onChangeHandler}
+                value={name}
+              />
+            </UserInfoBox>
+          </UserInfoContainer>
+        )}
+
         <InputButton type="submit">변경</InputButton>
       </MyPageContainer>
     </MyPageInner>
@@ -114,7 +125,7 @@ const MyPageContainer = styled.form`
   justify-content: center;
   box-sizing: border-box;
   position: relative;
-  padding: 0 5vw;
+  padding: 0 6vw;
 `;
 
 const MyPageTitle = styled.div`

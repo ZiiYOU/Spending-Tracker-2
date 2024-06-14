@@ -107,6 +107,14 @@
       "price": "25000",
       "createdBy": "바보",
       "userId": "babo"
+    },
+    {
+      "id": "b98e",
+      "date": "2024-06-15",
+      "item": "🎂 식비",
+      "description": "나 힘들어..",
+      "price": "234000",
+      "createdBy": "이지아"
     }
   ]
 }

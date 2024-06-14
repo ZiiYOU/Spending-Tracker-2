@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import uuid from "react-uuid";
 import { useNavigate } from "react-router-dom";
 import { MonthContext } from "../context/selectedMonthContext";
 import { AuthContext } from "../context/authContext";
@@ -11,6 +10,7 @@ import {
 } from "../api/spending.js";
 import useSpending from "../customHook/useSpending.jsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useAuth from "../customHook/useAuth.jsx";
 
 const InputContainer = ({ listId, detailedObj }) => {
   const [date, setDate] = useState(0);
@@ -21,6 +21,8 @@ const InputContainer = ({ listId, detailedObj }) => {
   const { userInfo, setUserInfo } = useContext(AuthContext);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  useAuth();
 
   const { spending, isPending, isError } = useSpending();
   if (isPending) {
