@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import SelectedSpending from "../components/SelectedSpending";
 import InputContainer from "../components/InputContainer";
+import useSpending from "../customHook/useSpending";
 
 const SpendingBox = styled.div`
   width: 100%;
@@ -16,11 +17,22 @@ const SpendingBox = styled.div`
 
 const Detailed = () => {
   const listId = useParams();
+
+  const { spending, isPending, isError } = useSpending();
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+  if (isError) {
+    return <div>Error !!</div>;
+  }
+
+  let detailedObj = spending.find((obj) => obj.id === listId.listId);
+
   return (
     <>
       <SpendingBox>
-        <SelectedSpending listId={listId} />
-        <InputContainer listId={listId} />
+        <SelectedSpending detailedObj={detailedObj} />
+        <InputContainer listId={listId.listId} detailedObj={detailedObj} />
       </SpendingBox>
     </>
   );

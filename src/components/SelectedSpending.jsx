@@ -1,22 +1,23 @@
 import React, { useContext, useEffect } from "react";
-import { SpendingContext } from "../context/spendingListContext";
 import { ListBox, IconBox, DateBox, DescriptionBox, NicknameBox } from "./List";
 import useSpending from "../customHook/useSpending";
 
-const SelectedSpending = ({ listId }) => {
-  const { list, setList } = useContext(SpendingContext);
-
-  useSpending();
-
-  console.log(list);
-  let detailedList = list.find((li) => li.id === listId.listId);
+const SelectedSpending = ({ detailedObj }) => {
+  const { spending, isPending, isError } = useSpending();
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+  if (isError) {
+    return <div>Error !!</div>;
+  }
+  console.log(spending);
 
   return (
     <>
-      {list.length && (
+      {detailedObj && (
         <>
           <ListBox backgroundColor="#fff" cursor="default" fontSize="18px">
-            <IconBox>{detailedList.item.split(" ")[0]}</IconBox>
+            <IconBox>{detailedObj.item.split(" ")[0]}</IconBox>
             <div
               style={{
                 width: "85%",
@@ -35,13 +36,13 @@ const SelectedSpending = ({ listId }) => {
                     top: "10px",
                   }}
                 >
-                  <DateBox>{detailedList.date}</DateBox>
-                  <NicknameBox>✍🏻 {detailedList.createdBy}</NicknameBox>
+                  <DateBox>{detailedObj.date}</DateBox>
+                  <NicknameBox>✍🏻 {detailedObj.createdBy}</NicknameBox>
                 </div>
 
-                <DescriptionBox>{detailedList.description}</DescriptionBox>
+                <DescriptionBox>{detailedObj.description}</DescriptionBox>
               </div>
-              {`${Number(detailedList.price).toLocaleString()} 원`}
+              {`${Number(detailedObj.price).toLocaleString()} 원`}
             </div>
           </ListBox>
         </>

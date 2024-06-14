@@ -3,18 +3,19 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Detailed from "../pages/Detailed";
 import Layout from "./Layout";
-import SpendingProvider from "../context/spendingListContext";
 import MonthProvider from "../context/selectedMonthContext";
 import AuthProvider from "../context/authContext";
 import Create from "../pages/Create";
 import SignIn from "../pages/SignIn";
 import Join from "../pages/Join";
 import MyPage from "../pages/MyPage";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const Router = () => {
+  const queryClient = new QueryClient();
   return (
-    <AuthProvider>
-      <SpendingProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
         <MonthProvider>
           <BrowserRouter>
             <Layout>
@@ -29,8 +30,8 @@ const Router = () => {
             </Layout>
           </BrowserRouter>
         </MonthProvider>
-      </SpendingProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 };
 

@@ -68,7 +68,7 @@
       "date": "2024-05-08",
       "item": "✈️ 여행 경비",
       "description": "100 일 기념 여행",
-      "price": "100000",
+      "price": "490000",
       "createdBy": "바보",
       "userId": "babo"
     },
@@ -91,11 +91,20 @@
       "userId": "babo"
     },
     {
-      "id": "401a4ec9-4994-8ad4-6d1d-1c939e4dd5db",
-      "date": "2024-12-30",
+      "id": "c87c",
+      "date": "2024-06-14",
       "item": "🎂 식비",
-      "description": "송년회",
-      "price": "100000",
+      "description": "Coffee",
+      "price": "25000",
+      "createdBy": "바보",
+      "userId": "babo"
+    },
+    {
+      "id": "39c3",
+      "date": "2024-06-14",
+      "item": "🎂 식비",
+      "description": "간지 치킨",
+      "price": "25000",
       "createdBy": "바보",
       "userId": "babo"
     }

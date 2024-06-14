@@ -2,13 +2,17 @@ import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import uuid from "react-uuid";
 import { useNavigate } from "react-router-dom";
-import { SpendingContext } from "../context/spendingListContext";
 import { MonthContext } from "../context/selectedMonthContext";
 import { AuthContext } from "../context/authContext";
-import axios from "axios";
+import {
+  addSpending,
+  updateSpending,
+  deleteSpending,
+} from "../api/spending.js";
+import useSpending from "../customHook/useSpending.jsx";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const InputContainer = ({ listId }) => {
-  const { list, setList } = useContext(SpendingContext);
+const InputContainer = ({ listId, detailedObj }) => {
   const [date, setDate] = useState(0);
   const [item, setItem] = useState("🎂 식비");
   const [description, setDescription] = useState("");
@@ -16,15 +20,44 @@ const InputContainer = ({ listId }) => {
   const { selectedMonth, setSelectedMonth } = useContext(MonthContext);
   const { userInfo, setUserInfo } = useContext(AuthContext);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const { spending, isPending, isError } = useSpending();
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+  if (isError) {
+    return <div>Error !!</div>;
+  }
+
+  const mutationAdd = useMutation({
+    mutationFn: addSpending,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["spending"]);
+    },
+  });
+
+  const mutationUpdate = useMutation({
+    mutationFn: updateSpending,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["spending"]);
+    },
+  });
+
+  const mutationDelete = useMutation({
+    mutationFn: deleteSpending,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["spending"]);
+    },
+  });
 
   useEffect(() => {
     if (listId) {
-      const ModifyList = list.filter((li) => li.id === listId.listId);
-      console.log(ModifyList);
-      setDate(ModifyList[0].date);
-      setItem(ModifyList[0].item);
-      setDescription(ModifyList[0].description);
-      setPrice(ModifyList[0].price);
+      console.log(detailedObj);
+      setDate(detailedObj.date);
+      setItem(detailedObj.item);
+      setDescription(detailedObj.description);
+      setPrice(detailedObj.price);
     }
   }, []);
 
@@ -45,7 +78,6 @@ const InputContainer = ({ listId }) => {
     }
 
     const spendingObj = {
-      id: uuid(),
       date: date,
       item: item,
       description: description,
@@ -54,18 +86,7 @@ const InputContainer = ({ listId }) => {
       userId: userInfo.userId,
     };
 
-    setList((prev) => [...prev, spendingObj]);
-
-    try {
-      const { data } = await axios.post(
-        "http://localhost:4000/spending",
-        spendingObj
-      );
-      alert("성공..");
-      console.log(data);
-    } catch (error) {
-      console.log("error =>", error);
-    }
+    mutationAdd.mutate(spendingObj);
 
     setSelectedMonth(Number(date.split("-")[1]));
     localStorage.setItem("selected month", Number(date.split("-")[1]));
@@ -75,56 +96,25 @@ const InputContainer = ({ listId }) => {
   const onModifyHandler = async (event) => {
     event.preventDefault();
 
-    const ModifiedList = list.map((li) => {
-      if (li.id.toString() === listId.listId.toString()) {
-        li = {
-          id: listId.listId,
-          date: date,
-          item: item,
-          description: description,
-          price: price,
-          createdBy: li.nickname,
-          userId: li.userId,
-        };
-      }
-      return li;
-    });
+    const ModifyObj = {
+      ...detailedObj,
+      date: date,
+      item: item,
+      description: description,
+      price: price,
+    };
 
-    const ModifiedObj = ModifiedList.filter(
-      (obj) => obj.id.toString() === listId.listId.toString()
-    );
-
-    try {
-      await axios.patch(
-        `http://localhost:4000/spending/${listId.listId}`,
-        ...ModifiedObj
-      );
-      alert("성공!");
-    } catch (error) {
-      console.log("error =>", error);
-    }
+    mutationUpdate.mutate(ModifyObj);
 
     setSelectedMonth(Number(date.split("-")[1]));
     localStorage.setItem("selected month", Number(date.split("-")[1]));
-    setList(ModifiedList);
 
     navigate("/");
   };
 
   const onDeleteHandler = async () => {
     if (confirm("이 항목을 삭제하시겠습니까 ?")) {
-      const DeletedList = list.filter(
-        (li) => li.id.toString() !== listId.listId.toString()
-      );
-
-      try {
-        await axios.delete(`http://localhost:4000/spending/${listId.listId}`);
-        alert("성공!");
-      } catch (error) {
-        console.log("error =>", error);
-      }
-
-      setList(DeletedList);
+      mutationDelete.mutate(listId);
       navigate("/");
     }
   };

@@ -5,10 +5,10 @@ import Summary from "../components/Summary";
 import List from "../components/List";
 import Addition from "../components/Addition";
 import { useContext } from "react";
-import { SpendingContext } from "../context/spendingListContext";
 import { MonthContext } from "../context/selectedMonthContext";
 import { AuthContext } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
+import useSpending from "../customHook/useSpending";
 
 const Container = styled.div`
   position: relative;
@@ -40,7 +40,6 @@ const LogoStyle = styled.div`
 `;
 
 const Home = () => {
-  const { list, setList } = useContext(SpendingContext);
   const { selectedMonth, setSelectedMonth } = useContext(MonthContext);
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -52,9 +51,17 @@ const Home = () => {
     }
   }, []);
 
+  const { spending, isPending, isError } = useSpending();
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+  if (isError) {
+    return <div>Error !!</div>;
+  }
+
   let filteredList = [];
-  if (list.length !== 0) {
-    filteredList = list.filter(
+  if (spending.length !== 0) {
+    filteredList = spending.filter(
       (li) => Number(selectedMonth) === Number(li.date.split("-")[1])
     );
   }

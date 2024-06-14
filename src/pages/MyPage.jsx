@@ -103,17 +103,18 @@ const MyPageInner = styled.div`
 
 const MyPageContainer = styled.form`
   width: 90%;
-  max-width: 400px;
-  min-width: 350px;
+  max-width: 450px;
+  min-width: 330px;
   height: 450px;
   border-radius: 50px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   box-sizing: border-box;
   position: relative;
-  padding: 5vh 5vw;
+  padding: 0 5vw;
 `;
 
 const MyPageTitle = styled.div`
@@ -155,6 +156,12 @@ const AvatarLabel = styled.label`
   justify-content: center;
   padding-top: 3%;
   cursor: pointer;
+  &:hover {
+    background-color: black;
+    border-color: black;
+    color: #fff;
+    transition: 0.5s;
+  }
 `;
 
 const UserInfoContainer = styled.div`
@@ -181,7 +188,6 @@ const UserInfoBox = styled.div`
 const UserInfoTitle = styled.div`
   width: 25%;
   height: 50%;
-  /* border: 1px solid #aaa; */
   display: flex;
   align-items: center;
   color: #202632;

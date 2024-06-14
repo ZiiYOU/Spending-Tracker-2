@@ -1,18 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { useEffect, useContext } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { SpendingContext } from "../context/spendingListContext";
 import { AuthContext } from "../context/authContext";
-import axios from "axios";
-import useSpending from "../customHook/useSpending";
 
 const List = ({ filteredList }) => {
-  const { list, setList } = useContext(SpendingContext);
   const { userInfo, setUserInfo } = useContext(AuthContext);
   const navigate = useNavigate();
-
-  useSpending();
 
   const GotoDetailedPage = (id, userId) => {
     if (userId === userInfo.userId) {

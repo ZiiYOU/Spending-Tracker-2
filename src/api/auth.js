@@ -2,7 +2,7 @@ import axios from "axios";
 
 const Auth_Api = "https://moneyfulpublicpolicy.co.kr";
 
-const signUp = async (info) => {
+export const signUp = async (info) => {
   try {
     const { data } = await axios.post(`${Auth_Api}/register`, info);
     return data;
@@ -12,7 +12,7 @@ const signUp = async (info) => {
   }
 };
 
-const logIn = async (info) => {
+export const logIn = async (info) => {
   try {
     const { data } = await axios.post(`${Auth_Api}/login`, info);
     localStorage.setItem("accessToken", data.accessToken);
@@ -24,8 +24,6 @@ const logIn = async (info) => {
   }
 };
 
-const logOut = () => {
+export const logOut = () => {
   localStorage.removeItem("accessToken");
 };
-
-export { signUp, logIn, logOut };
